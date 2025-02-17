@@ -4,6 +4,7 @@ import com.springboot.Banking_Application.dto.AccountDTO;
 import com.springboot.Banking_Application.entity.Account;
 
 public class AccountMapper {
+
     public static Account mapToAccount (AccountDTO accountDTO) {
         return new Account(
                 accountDTO.getId(),
