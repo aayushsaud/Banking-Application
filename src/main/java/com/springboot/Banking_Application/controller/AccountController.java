@@ -6,6 +6,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -18,18 +19,34 @@ public class AccountController {
         this.accountService = accountService;
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<?> getAccountById (@PathVariable Long id) {
+    @GetMapping()
+    public ResponseEntity<List<AccountDTO>> getAllAccounts () {
+        return new ResponseEntity<>(accountService.getAllAccounts(), HttpStatus.OK);
+    }
+
+    @GetMapping("get/{id}")
+    public ResponseEntity<AccountDTO> getAccountById (@PathVariable Long id) {
         return new ResponseEntity<>(accountService.getAccountById(id), HttpStatus.OK);
     }
 
-    @PostMapping
+    @PostMapping("/create")
     public ResponseEntity<?> createAccount (@RequestBody AccountDTO accountDTO) {
-        return new ResponseEntity<>(accountService.createAccount(accountDTO), HttpStatus.CREATED);
+        AccountDTO account = accountService.createAccount(accountDTO);
+        return new ResponseEntity<>(account, HttpStatus.CREATED);
     }
 
     @PutMapping("/deposit/{id}")
     public ResponseEntity<?> depositBalance (@PathVariable Long id, @RequestBody Map<String, Double> request) {
         return new ResponseEntity<>(accountService.depositBalance(id, request.get("amount")), HttpStatus.CREATED);
+    }
+
+    @PutMapping("/withdraw/{id}")
+    public ResponseEntity<?> withdrawBalance (@PathVariable Long id, @RequestBody Map<String, Double> request) {
+        return new ResponseEntity<>(accountService.withdrawBalance(id, request.get("amount")), HttpStatus.CREATED);
+    }
+    @DeleteMapping("delete/{id}")
+    public ResponseEntity<?> deleteAccount (@PathVariable Long id) {
+        accountService.deleteAccount(id);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 }
