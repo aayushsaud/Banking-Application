@@ -19,7 +19,7 @@ public class AccountController {
         this.accountService = accountService;
     }
 
-    @GetMapping()
+    @GetMapping
     public ResponseEntity<List<AccountDTO>> getAllAccounts () {
         return new ResponseEntity<>(accountService.getAllAccounts(), HttpStatus.OK);
     }
@@ -44,6 +44,7 @@ public class AccountController {
     public ResponseEntity<?> withdrawBalance (@PathVariable Long id, @RequestBody Map<String, Double> request) {
         return new ResponseEntity<>(accountService.withdrawBalance(id, request.get("amount")), HttpStatus.CREATED);
     }
+
     @DeleteMapping("delete/{id}")
     public ResponseEntity<?> deleteAccount (@PathVariable Long id) {
         accountService.deleteAccount(id);
