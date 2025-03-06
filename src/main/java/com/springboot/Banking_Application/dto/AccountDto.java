@@ -1,11 +1,12 @@
 package com.springboot.Banking_Application.dto;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
+import lombok.*;
 
-@Data
+@Getter
+@Setter
 @AllArgsConstructor
-public class AccountDTO {
+@NoArgsConstructor
+public class AccountDto {
 
     private Long id;
     private String accountHolderName;

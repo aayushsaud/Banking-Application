@@ -1,20 +1,20 @@
 package com.springboot.Banking_Application.mapper;
 
-import com.springboot.Banking_Application.dto.AccountDTO;
+import com.springboot.Banking_Application.dto.AccountDto;
 import com.springboot.Banking_Application.entity.Account;
 
 public class AccountMapper {
 
-    public static Account mapToAccount (AccountDTO accountDTO) {
+    public static Account mapToAccount (AccountDto accountDto) {
         return new Account(
-                accountDTO.getId(),
-                accountDTO.getAccountHolderName(),
-                accountDTO.getBalance()
+                accountDto.getId(),
+                accountDto.getAccountHolderName(),
+                accountDto.getBalance()
         );
     }
 
-    public static AccountDTO mapToAccountDTO(Account account) {
-        return new AccountDTO(
+    public static AccountDto mapToAccountDto(Account account) {
+        return new AccountDto(
                 account.getId(),
                 account.getAccountHolderName(),
                 account.getBalance()

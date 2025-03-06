@@ -11,12 +11,13 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "accounts")
-public class Account {
+@Table(name = "users")
+public class User {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private String accountHolderName;
-    private double balance;
+    @Column(unique = true)
+    private String userName;
+    private String password;
 }
