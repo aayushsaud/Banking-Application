@@ -16,10 +16,12 @@ public class Account {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "account_id")
     private Long id;
     @Column(name = "bank_name")
     private String bankName;
     @Column(name = "account_holder_name", unique = true)
     private String accountHolderName;
+    @Column(name = "balance")
     private double balance;
 }

@@ -2,12 +2,12 @@ package com.springboot.Banking_Application.service.impl;
 
 import com.springboot.Banking_Application.dto.UserDto;
 import com.springboot.Banking_Application.entity.User;
+import com.springboot.Banking_Application.exception.UserNotFoundException;
 import com.springboot.Banking_Application.mapper.UserMapper;
 import com.springboot.Banking_Application.repository.UserRepository;
 import com.springboot.Banking_Application.service.UserService;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -22,18 +22,12 @@ public class UserServiceImpl implements UserService {
     @Override
     public List<UserDto> getAllUsers() {
         List<User> userList = userRepository.findAll();
-        List<UserDto> userDtoList = new ArrayList<>();
-
-        for (User user : userList) {
-            userDtoList.add(UserMapper.mapToUserDto(user));
-        }
-
-        return userDtoList;
+        return userList.stream().map(UserMapper::mapToUserDto).toList();
     }
 
     @Override
     public UserDto getUserById(Long id) {
-        User user = userRepository.findById(id).orElseThrow(() -> new RuntimeException("User not found with ID: " + id));
+        User user = userRepository.findById(id).orElseThrow(() -> new UserNotFoundException("User not found with ID: " + id));
         return UserMapper.mapToUserDto(user);
     }
 
@@ -46,7 +40,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void deleteUserById(Long id) {
-        userRepository.findById(id).orElseThrow(() -> new RuntimeException("User not found with ID: " + id));
+        userRepository.findById(id).orElseThrow(() -> new UserNotFoundException("User not found with ID: " + id));
         userRepository.deleteById(id);
     }
 }
