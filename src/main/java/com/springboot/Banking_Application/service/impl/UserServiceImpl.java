@@ -2,6 +2,7 @@ package com.springboot.Banking_Application.service.impl;
 
 import com.springboot.Banking_Application.dto.UserDto;
 import com.springboot.Banking_Application.entity.User;
+import com.springboot.Banking_Application.exception.UserAlreadyExistsException;
 import com.springboot.Banking_Application.exception.UserNotFoundException;
 import com.springboot.Banking_Application.mapper.UserMapper;
 import com.springboot.Banking_Application.repository.UserRepository;
@@ -33,9 +34,18 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserDto createUser(UserDto userDto) {
+        if (userRepository.existsByUserName(userDto.getUserName())) {
+            throw new UserAlreadyExistsException("Username '" + userDto.getUserName() + "' is already taken.");
+        }
         User user = UserMapper.mapToUser(userDto);
         User saveduser = userRepository.save(user);
         return UserMapper.mapToUserDto(saveduser);
+    }
+
+    @Override
+    public UserDto findUserByUserName(String userName) {
+        User user = userRepository.findByUserName(userName);
+        return UserMapper.mapToUserDto(user);
     }
 
     @Override

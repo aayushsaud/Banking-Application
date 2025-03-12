@@ -1,16 +1,15 @@
 package com.springboot.Banking_Application.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
+@Builder
 @Table(name = "accounts")
 public class Account {
 
@@ -24,4 +23,10 @@ public class Account {
     private String accountHolderName;
     @Column(name = "balance")
     private double balance;
+    @JsonIgnore
+    @ManyToOne
+    @JoinColumn(
+            name = "user_id",
+            nullable = false)
+    private User user;
 }
