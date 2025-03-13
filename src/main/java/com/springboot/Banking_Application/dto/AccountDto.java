@@ -1,6 +1,5 @@
 package com.springboot.Banking_Application.dto;
 
-import com.springboot.Banking_Application.entity.User;
 import lombok.*;
 
 @Getter

@@ -2,19 +2,13 @@ package com.springboot.Banking_Application.service;
 
 import com.springboot.Banking_Application.dto.AccountDto;
 
-import java.util.List;
-
 public interface AccountService {
 
-    List<AccountDto> getAllAccounts();
+    AccountDto createAccount(AccountDto accountDTO, String userName);
 
-    AccountDto getAccountById(Long id);
+    AccountDto depositBalance(Long id, String userName, double amount);
 
-    AccountDto createAccount(AccountDto accountDTO);
+    AccountDto withdrawBalance(Long id, String userName, double amount);
 
-    AccountDto depositBalance(Long id, double amount);
-
-    AccountDto withdrawBalance(Long id, double amount);
-
-    void deleteAccount(Long id);
+    void deleteAccount(Long id, String userName);
 }

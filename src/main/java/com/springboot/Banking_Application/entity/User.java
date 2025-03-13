@@ -1,5 +1,6 @@
 package com.springboot.Banking_Application.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 
