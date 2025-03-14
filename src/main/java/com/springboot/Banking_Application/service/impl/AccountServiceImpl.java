@@ -32,7 +32,7 @@ public class AccountServiceImpl implements AccountService {
         UserDto userDto = userService.findByUserName(userName);
         User user = UserMapper.mapToUser(userDto);
         Account account = AccountMapper.mapToAccount(accountDto);
-        account.setAccountHolderName(account.getAccountHolderName());
+        account.setAccountHolderName(userName);
         account.setUser(user);
         Account savedAccount = accountRepository.save(account);
         return AccountMapper.mapToAccountDto(savedAccount);
