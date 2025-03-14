@@ -35,6 +35,17 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @Transactional
+    public UserDto updateUser(UserDto userDto) {
+        User user = UserMapper.mapToUser(userDto);
+        user.setUserName(user.getUserName());
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
+        User saveduser = userRepository.save(user);
+        return UserMapper.mapToUserDto(saveduser);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
     public UserDto findByUserName(String userName) {
         User user = userRepository.findByUserName(userName);
         return UserMapper.mapToUserDto(user);

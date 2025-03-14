@@ -28,6 +28,7 @@ public class AccountServiceImpl implements AccountService {
     }
 
     @Override
+    @Transactional
     public AccountDto createAccount(AccountDto accountDto, String userName) {
         UserDto userDto = userService.findByUserName(userName);
         User user = UserMapper.mapToUser(userDto);
@@ -39,6 +40,7 @@ public class AccountServiceImpl implements AccountService {
     }
 
     @Override
+    @Transactional
     public AccountDto depositBalance(Long id, String userName, double amount) {
         Account account = accountRepository.findById(id)
                 .filter(acc -> acc.getUser().getUserName().equals(userName))
@@ -49,6 +51,7 @@ public class AccountServiceImpl implements AccountService {
     }
 
     @Override
+    @Transactional
     public AccountDto withdrawBalance(Long id, String userName, double amount) {
         Account account = accountRepository.findById(id)
                 .filter(acc -> acc.getUser().getUserName().equals(userName))

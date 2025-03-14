@@ -31,7 +31,7 @@ public class UserController {
         user.setPassword(userDto.getPassword());
 
         UserDto userDto2 = UserMapper.mapToUserDto(user);
-        UserDto userDto3 = userService.createUser(userDto2);
+        UserDto userDto3 = userService.updateUser(userDto2);
         return new ResponseEntity<>(userDto3, HttpStatus.NO_CONTENT);
     }
 
