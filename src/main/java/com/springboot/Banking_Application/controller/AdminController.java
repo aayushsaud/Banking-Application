@@ -7,21 +7,23 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-@RestController
-@RequestMapping("/public")
-public class PublicController {
+import java.util.List;
 
+@RestController
+@RequestMapping("/api/admin")
+public class AdminController {
     @Autowired
     UserService userService;
 
-    @GetMapping("/health-check")
-    public String healthCheck() {
-        return "App is live and running.";
+    @PostMapping("/create")
+    public ResponseEntity<?> createUser (@RequestBody UserDto userDto) {
+        UserDto userDto1 = userService.createAdmin(userDto);
+        return new ResponseEntity<>(userDto1, HttpStatus.CREATED);
     }
 
-    @PostMapping("/create-user")
-    public ResponseEntity<?> createUser (@RequestBody UserDto userDto) {
-        UserDto userDto1 = userService.createUser(userDto);
-        return new ResponseEntity<>(userDto1, HttpStatus.CREATED);
+    @GetMapping("/all-users")
+    public ResponseEntity<List<?>> getAllUsers () {
+        List<UserDto> allUsers = userService.getAllUsers();
+        return new ResponseEntity<>(allUsers, HttpStatus.OK);
     }
 }
