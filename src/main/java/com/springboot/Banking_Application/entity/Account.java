@@ -3,10 +3,6 @@ package com.springboot.Banking_Application.entity;
 import jakarta.persistence.*;
 import lombok.*;
 
-@Getter
-@Setter
-@NoArgsConstructor
-@AllArgsConstructor
 @Entity
 @Builder
 @Table(name = "accounts")
@@ -27,4 +23,55 @@ public class Account {
             name = "user_id",
             nullable = false)
     private User user;
+
+    public Account() {
+    }
+
+    public Account(Long id, String bankName, String accountHolderName, double balance, User user) {
+        this.id = id;
+        this.bankName = bankName;
+        this.accountHolderName = accountHolderName;
+        this.balance = balance;
+        this.user = user;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public String getBankName() {
+        return bankName;
+    }
+
+    public void setBankName(String bankName) {
+        this.bankName = bankName;
+    }
+
+    public String getAccountHolderName() {
+        return accountHolderName;
+    }
+
+    public void setAccountHolderName(String accountHolderName) {
+        this.accountHolderName = accountHolderName;
+    }
+
+    public double getBalance() {
+        return balance;
+    }
+
+    public void setBalance(double balance) {
+        this.balance = balance;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
 }
