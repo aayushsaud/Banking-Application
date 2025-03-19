@@ -9,6 +9,7 @@ import com.springboot.Banking_Application.entity.User;
 import com.springboot.Banking_Application.mapper.AccountMapper;
 import com.springboot.Banking_Application.mapper.UserMapper;
 import com.springboot.Banking_Application.service.AccountService;
+import com.springboot.Banking_Application.service.AuthenticationService;
 import com.springboot.Banking_Application.service.UserService;
 import com.springboot.Banking_Application.service.impl.ElasticAccountService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,106 +26,97 @@ import java.util.Map;
 @RequestMapping("/api/account")
 public class AccountController {
 
-    @Autowired
-    AccountService accountService;
+    private final AccountService accountService;
+    private final UserService userService;
+    private final AuthenticationService authenticationService;
+    private final ElasticAccountService elasticAccountService;
+    private String userName;
 
-    @Autowired
-    UserService userService;
+    public AccountController(AccountService accountService,
+                             UserService userService, AuthenticationService authenticationService,
+                             ElasticAccountService elasticAccountService) {
+        this.accountService = accountService;
+        this.userService = userService;
+        this.authenticationService = authenticationService;
+        this.elasticAccountService = elasticAccountService;
+    }
 
-    @Autowired
-    ElasticAccountService elasticAccountService;
+    @ModelAttribute
+    public void setUserName() {
+        this.userName = authenticationService.getAuthenticatedUserName();
+    }
 
     @GetMapping
     public ResponseEntity<List<AccountDto>> getAllAccounts () {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        String userName = authentication.getName();
+        List<AccountDto> accountDtoList = accountService.getAllAccounts(userName);
 
-        UserDto userDto = userService.findByUserName(userName);
-        User user = UserMapper.mapToUser(userDto);
-
-        List<Account> account = user.getAccounts();
-        if (account.isEmpty()) {
-            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        if (accountDtoList.isEmpty()) {
+            return ResponseEntity.noContent().build();
         }
 
-        List<AccountDto> accountDto = account.stream()
-                .map(AccountMapper::mapToAccountDto)
-                .toList();
-
-        return new ResponseEntity<>(accountDto, HttpStatus.OK);
+        return ResponseEntity.ok(accountDtoList);
     }
 
     @PostMapping("/create")
     public ResponseEntity<?> createAccount (@RequestBody AccountDto accountDto) {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        String userName = authentication.getName();
-        AccountDto accountDto1 = accountService.createAccount(accountDto, userName);
+        AccountDto savedAccountDto = accountService.createAccount(accountDto, userName);
 
         Long userId = userService.findByUserName(userName).getId();
-        ElasticAccount elasticAccount = ElasticAccountMapper.mapToElasticAccount(accountDto1, userId);
+        ElasticAccount elasticAccount = ElasticAccountMapper.mapToElasticAccount(savedAccountDto, userId);
         elasticAccountService.save(elasticAccount);
 
-        return new ResponseEntity<>(accountDto1, HttpStatus.CREATED);
+        return ResponseEntity.ok(savedAccountDto);
     }
 
     @PutMapping("/deposit/{id}")
     public ResponseEntity<?> depositBalance (@PathVariable Long id, @RequestBody Map<String, Double> request) {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        String userName = authentication.getName();
         AccountDto accountDto = accountService.depositBalance(id, userName, request.get("amount"));
 
         Long userId = userService.findByUserName(userName).getId();
         ElasticAccount elasticAccount = ElasticAccountMapper.mapToElasticAccount(accountDto, userId);
         elasticAccountService.save(elasticAccount);
 
-        return new ResponseEntity<>(accountDto, HttpStatus.CREATED);
+        return ResponseEntity.ok(accountDto);
     }
 
     @PutMapping("/withdraw/{id}")
     public ResponseEntity<?> withdrawBalance (@PathVariable Long id, @RequestBody Map<String, Double> request) {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        String userName = authentication.getName();
-        AccountDto accountDto = accountService.depositBalance(id, userName, request.get("amount"));
+        AccountDto accountDto = accountService.withdrawBalance(id, userName, request.get("amount"));
 
         Long userId = userService.findByUserName(userName).getId();
         ElasticAccount elasticAccount = ElasticAccountMapper.mapToElasticAccount(accountDto, userId);
         elasticAccountService.save(elasticAccount);
 
-        return new ResponseEntity<>(accountDto, HttpStatus.CREATED);
+        return ResponseEntity.ok(accountDto);
     }
 
     @DeleteMapping("/delete/{id}")
     public ResponseEntity<?> deleteAccount (@PathVariable Long id) {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        String userName = authentication.getName();
         accountService.deleteAccount(id, userName);
-
         elasticAccountService.deleteById(id);
-
-        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        return ResponseEntity.noContent().build();
     }
 
     @GetMapping("/search")
     public ResponseEntity<List<AccountDto>> searchAccountsByUserId() {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        String authenticatedUserName = authentication.getName();
-
-        UserDto authenticatedUser = userService.findByUserName(authenticatedUserName);
+        UserDto authenticatedUser = userService.findByUserName(userName);
 
         if (authenticatedUser == null) {
-            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+            return ResponseEntity
+                    .status(HttpStatus.FORBIDDEN)
+                    .build();
         }
 
         List<ElasticAccount> accounts = elasticAccountService.findByUserId(authenticatedUser.getId());
 
         if (accounts.isEmpty()) {
-            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+            return ResponseEntity.noContent().build();
         }
 
         List<AccountDto> accountDtoList = accounts.stream()
                 .map(ElasticAccountMapper::mapToAccountDto)
                 .toList();
 
-        return new ResponseEntity<>(accountDtoList, HttpStatus.OK);
+        return ResponseEntity.ok(accountDtoList);
     }
 }

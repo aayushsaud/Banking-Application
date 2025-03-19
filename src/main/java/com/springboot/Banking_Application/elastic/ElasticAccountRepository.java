@@ -1,6 +1,5 @@
 package com.springboot.Banking_Application.elastic;
 
-import com.springboot.Banking_Application.entity.Account;
 import org.springframework.data.elasticsearch.repository.ElasticsearchRepository;
 
 import java.util.List;

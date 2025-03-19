@@ -1,12 +1,10 @@
 package com.springboot.Banking_Application.entity;
 
 import jakarta.persistence.*;
-import lombok.*;
 
 import java.util.List;
 
 @Entity
-@Builder
 @Table(name = "users")
 public class User {
 

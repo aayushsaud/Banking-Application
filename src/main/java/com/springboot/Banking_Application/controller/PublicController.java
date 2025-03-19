@@ -3,8 +3,6 @@ package com.springboot.Banking_Application.controller;
 import com.springboot.Banking_Application.dto.UserDto;
 import com.springboot.Banking_Application.service.UserService;
 import com.springboot.Banking_Application.util.JwtUtil;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -16,17 +14,20 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/public")
 public class PublicController {
 
-    @Autowired
-    AuthenticationManager authenticationManager;
+    private final AuthenticationManager authenticationManager;
+    private final UserService userService;
+    private final UserDetailsService userDetailsService;
+    private final JwtUtil jwtUtil;
 
-    @Autowired
-    UserService userService;
-
-    @Autowired
-    UserDetailsService userDetailsService;
-
-    @Autowired
-    JwtUtil jwtUtil;
+    public PublicController(AuthenticationManager authenticationManager,
+                            UserService userService,
+                            UserDetailsService userDetailsService,
+                            JwtUtil jwtUtil) {
+        this.authenticationManager = authenticationManager;
+        this.userService = userService;
+        this.userDetailsService = userDetailsService;
+        this.jwtUtil = jwtUtil;
+    }
 
     @GetMapping("/health-check")
     public String healthCheck() {
@@ -35,8 +36,8 @@ public class PublicController {
 
     @PostMapping("/sign-up")
     public ResponseEntity<?> signUp (@RequestBody UserDto userDto) {
-        UserDto userDto1 = userService.createUser(userDto);
-        return new ResponseEntity<>(userDto1, HttpStatus.CREATED);
+        UserDto createdUser = userService.createUser(userDto);
+        return ResponseEntity.ok(createdUser);
     }
 
     @PostMapping("/log-in")
@@ -47,10 +48,12 @@ public class PublicController {
                             userDto.getUserName(), userDto.getPassword()));
             UserDetails userDetails = userDetailsService.loadUserByUsername(userDto.getUserName());
             String jwtToken = jwtUtil.generateToken(userDetails.getUsername());
-            return new ResponseEntity<>(jwtToken, HttpStatus.OK);
+            return ResponseEntity.ok(jwtToken);
         }
         catch (Exception e) {
-            return new ResponseEntity<>("Incorrect username or password", HttpStatus.BAD_REQUEST);
+            return ResponseEntity
+                    .badRequest()
+                    .body("Incorrect username or password");
         }
     }
 }

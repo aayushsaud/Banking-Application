@@ -1,10 +1,8 @@
 package com.springboot.Banking_Application.entity;
 
 import jakarta.persistence.*;
-import lombok.*;
 
 @Entity
-@Builder
 @Table(name = "accounts")
 public class Account {
 
@@ -12,12 +10,16 @@ public class Account {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "account_id")
     private Long id;
+
     @Column(name = "bank_name")
     private String bankName;
+
     @Column(name = "account_holder_name")
     private String accountHolderName;
+
     @Column(name = "balance")
     private double balance;
+
     @ManyToOne
     @JoinColumn(
             name = "user_id",
@@ -33,6 +35,13 @@ public class Account {
         this.accountHolderName = accountHolderName;
         this.balance = balance;
         this.user = user;
+    }
+
+    public Account(Long id, String bankName, String accountHolderName, double balance) {
+        this.id = id;
+        this.bankName = bankName;
+        this.accountHolderName = accountHolderName;
+        this.balance = balance;
     }
 
     public Long getId() {

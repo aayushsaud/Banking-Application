@@ -1,7 +1,6 @@
 package com.springboot.Banking_Application.service;
 
 import com.springboot.Banking_Application.dto.UserDto;
-
 import java.util.List;
 
 public interface UserService {

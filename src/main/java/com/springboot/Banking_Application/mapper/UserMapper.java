@@ -11,24 +11,24 @@ public class UserMapper {
     public static User mapToUser (UserDto userDto) {
         List<Account> accountsList = userDto.getAccounts().stream()
                 .map(AccountMapper::mapToAccount).toList();
-        return User.builder()
-                .id((userDto.getId()))
-                .userName(userDto.getUserName())
-                .password(userDto.getPassword())
-                .role(userDto.getRole())
-                .accounts(accountsList)
-                .build();
+        return new User(
+                userDto.getId(),
+                userDto.getUserName(),
+                userDto.getPassword(),
+                userDto.getRole(),
+                accountsList
+        );
     }
 
     public static UserDto mapToUserDto (User user) {
         List<AccountDto> accountDtoList = user.getAccounts().stream()
                 .map(AccountMapper::mapToAccountDto).toList();
-        return UserDto.builder()
-                .id((user.getId()))
-                .userName(user.getUserName())
-                .password(user.getPassword())
-                .accounts(accountDtoList)
-                .role(user.getRole())
-                .build();
+        return new UserDto(
+                user.getId(),
+                user.getUserName(),
+                user.getPassword(),
+                user.getRole(),
+                accountDtoList
+        );
     }
 }

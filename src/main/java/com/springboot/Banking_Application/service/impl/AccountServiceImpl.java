@@ -11,20 +11,31 @@ import com.springboot.Banking_Application.mapper.UserMapper;
 import com.springboot.Banking_Application.repository.AccountRepository;
 import com.springboot.Banking_Application.service.AccountService;
 import com.springboot.Banking_Application.service.UserService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 @Service
 public class AccountServiceImpl implements AccountService {
 
-    @Autowired
-    UserService userService;
-
     private final AccountRepository accountRepository;
+    private final UserService userService;  // Make final
 
-    public AccountServiceImpl(AccountRepository accountRepository) {
+    public AccountServiceImpl(AccountRepository accountRepository, UserService userService) {
         this.accountRepository = accountRepository;
+        this.userService = userService;
+    }
+
+    @Override
+    public List<AccountDto> getAllAccounts(String userName) {
+        UserDto userDto = userService.findByUserName(userName);
+        User user = UserMapper.mapToUser(userDto);
+        List<Account> accountList = user.getAccounts();
+
+        return accountList.stream()
+                .map(AccountMapper::mapToAccountDto)
+                .toList();
     }
 
     @Override
