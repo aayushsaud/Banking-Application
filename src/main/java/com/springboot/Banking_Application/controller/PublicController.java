@@ -10,8 +10,10 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Map;
+
 @RestController
-@RequestMapping("/public")
+@RequestMapping("/api/public")
 public class PublicController {
 
     private final AuthenticationManager authenticationManager;
@@ -48,7 +50,7 @@ public class PublicController {
                             userDto.getUserName(), userDto.getPassword()));
             UserDetails userDetails = userDetailsService.loadUserByUsername(userDto.getUserName());
             String jwtToken = jwtUtil.generateToken(userDetails.getUsername());
-            return ResponseEntity.ok(jwtToken);
+            return ResponseEntity.ok(Map.of("token", jwtToken));
         }
         catch (Exception e) {
             return ResponseEntity
