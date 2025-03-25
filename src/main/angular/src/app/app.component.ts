@@ -7,7 +7,7 @@ import { filter } from 'rxjs/operators';
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [CommonModule, RouterModule],
+  imports: [CommonModule, RouterModule], // ✅ REMOVE AccountComponent
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss']
 })

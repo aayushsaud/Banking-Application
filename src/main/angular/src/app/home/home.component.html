@@ -22,6 +22,18 @@
   <ul>
     <li *ngFor="let account of accounts">
       <strong>{{ account.bankName }}</strong> - Balance: {{ account.balance | currency }}
+
+      <!-- Deposit and Withdraw Amount for the Current Account -->
+      <div>
+        <input type="number" [(ngModel)]="account.amount" placeholder="Enter amount" />
+
+        <button (click)="depositBalance(account.id, account.amount)">Deposit</button>
+        <button (click)="withdrawBalance(account.id, account.amount)">Withdraw</button>
+      </div>
+
+      <!-- Delete Account -->
+      <button (click)="deleteAccount(account.id)">❌</button>
     </li>
   </ul>
 </div>
+
