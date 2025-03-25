@@ -1,0 +1,20 @@
+<div class="admin-container">
+  <h2>Admin Panel</h2>
+
+  <!-- Create Admin Form -->
+  <form (ngSubmit)="createAdmin()">
+    <input type="text" [(ngModel)]="newAdmin.userName" name="userName" placeholder="Enter username" required />
+    <input type="password" [(ngModel)]="newAdmin.password" name="password" placeholder="Enter password" required />
+    <button type="submit">Create Admin</button>
+  </form>
+
+  <p *ngIf="errorMessage" class="error">{{ errorMessage }}</p>
+
+  <!-- Users List -->
+  <h3>All Users</h3>
+  <ul>
+    <li *ngFor="let user of users">
+      <strong>{{ user.userName }}</strong> - {{ user.role }}
+    </li>
+  </ul>
+</div>

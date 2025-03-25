@@ -1,7 +1,7 @@
 <h1>Welcome to Your Banking Application</h1>
 
 <!-- Create Account Form -->
-<div>
+<div class="account-form-container">
   <h2>Create a New Account</h2>
   <form (ngSubmit)="createAccount()">
     <div>
@@ -17,23 +17,21 @@
 </div>
 
 <!-- Display Accounts -->
-<div>
+<div class="accounts-list-container">
   <h2>Your Accounts</h2>
   <ul>
     <li *ngFor="let account of accounts">
-      <strong>{{ account.bankName }}</strong> - Balance: {{ account.balance | currency }}
-
-      <!-- Deposit and Withdraw Amount for the Current Account -->
-      <div>
-        <input type="number" [(ngModel)]="account.amount" placeholder="Enter amount" />
-
-        <button (click)="depositBalance(account.id, account.amount)">Deposit</button>
-        <button (click)="withdrawBalance(account.id, account.amount)">Withdraw</button>
+      <div class="account-details">
+        <strong>{{ account.bankName }}</strong> - Balance: {{ account.balance | currency }}
       </div>
 
-      <!-- Delete Account -->
-      <button (click)="deleteAccount(account.id)">❌</button>
+      <!-- Deposit and Withdraw Amount for the Current Account -->
+      <div class="transaction-buttons">
+        <input type="number" [(ngModel)]="account.amount" placeholder="Enter amount" />
+        <button class="deposit-btn" (click)="depositBalance(account.id, account.amount)">Deposit</button>
+        <button class="withdraw-btn" (click)="withdrawBalance(account.id, account.amount)">Withdraw</button>
+        <button class="delete-btn" (click)="deleteAccount(account.id)">Delete</button>
+      </div>
     </li>
   </ul>
 </div>
-

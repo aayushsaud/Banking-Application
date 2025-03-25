@@ -6,6 +6,7 @@ import com.springboot.Banking_Application.util.JwtUtil;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.web.bind.annotation.*;
@@ -43,19 +44,24 @@ public class PublicController {
     }
 
     @PostMapping("/log-in")
-    public ResponseEntity<?> logIn (@RequestBody UserDto userDto) {
+    public ResponseEntity<?> logIn(@RequestBody UserDto userDto) {
         try {
             authenticationManager.authenticate(
                     new UsernamePasswordAuthenticationToken(
                             userDto.getUserName(), userDto.getPassword()));
             UserDetails userDetails = userDetailsService.loadUserByUsername(userDto.getUserName());
             String jwtToken = jwtUtil.generateToken(userDetails.getUsername());
-            return ResponseEntity.ok(Map.of("token", jwtToken));
-        }
-        catch (Exception e) {
+            String role = userDetails.getAuthorities().stream()
+                    .map(GrantedAuthority::getAuthority)
+                    .findFirst()
+                    .orElse("USER");
+
+            return ResponseEntity.ok(Map.of("token", jwtToken, "role", role));
+        } catch (Exception e) {
             return ResponseEntity
                     .badRequest()
                     .body("Incorrect username or password");
         }
     }
+
 }

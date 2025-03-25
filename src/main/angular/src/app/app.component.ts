@@ -7,7 +7,7 @@ import { filter } from 'rxjs/operators';
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [CommonModule, RouterModule], // ✅ REMOVE AccountComponent
+  imports: [CommonModule, RouterModule],
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss']
 })
@@ -19,8 +19,8 @@ export class AppComponent {
     this.router.events
       .pipe(filter((event) => event instanceof NavigationEnd))
       .subscribe((event: any) => {
-        // Show navigation only on the home page
-        this.showNavigation = event.url === '/home';
+        // Show navigation on both the home page and the admin panel
+        this.showNavigation = event.url === '/home' || event.url === '/admin';
       });
   }
 
