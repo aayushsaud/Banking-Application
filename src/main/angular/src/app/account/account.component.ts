@@ -1,18 +1,18 @@
 import { Component } from '@angular/core';
-import { AccountService } from '../services/account.service'; // Adjust the path if needed
-import { CommonModule } from '@angular/common'; // Import CommonModule for ngIf, ngFor
-import { FormsModule } from '@angular/forms'; // Import FormsModule for ngModel
+import { AccountService } from '../services/account.service';
+import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-account',
-  standalone: true,  // Make this a standalone component
-  imports: [CommonModule, FormsModule], // Import required modules for this standalone component
+  standalone: true,
+  imports: [CommonModule, FormsModule],
   templateUrl: './account.component.html',
   styleUrls: ['./account.component.scss']
 })
 export class AccountComponent {
-  accountId: number = 1; // Replace with dynamic account ID if needed
-  amount: number = 0; // Stores the user-entered amount
+  accountId: number = 1;
+  amount: number = 0;
 
   constructor(private accountService: AccountService) {}
 

@@ -1,8 +1,6 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { Router, NavigationEnd } from '@angular/router';
-import { RouterModule } from '@angular/router';
-import { filter } from 'rxjs/operators';
+import { Router, RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-root',
@@ -12,20 +10,14 @@ import { filter } from 'rxjs/operators';
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent {
-  showNavigation: boolean = false; // Default to false
-
-  constructor(private router: Router) {
-    // Listen to route changes
-    this.router.events
-      .pipe(filter((event) => event instanceof NavigationEnd))
-      .subscribe((event: any) => {
-        // Show navigation on both the home page and the admin panel
-        this.showNavigation = event.url === '/home' || event.url === '/admin';
-      });
+  get showNavigation(): boolean {
+    return !!localStorage.getItem('token');
   }
 
+  constructor(private router: Router) {}
+
   logout(): void {
-    localStorage.removeItem('token'); // Clear the JWT token
-    this.router.navigate(['/login']); // Redirect to the login page
+    localStorage.removeItem('token');
+    this.router.navigate(['/login']);
   }
 }

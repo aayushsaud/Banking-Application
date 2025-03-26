@@ -7,10 +7,10 @@ import { User } from '../models/user.model';
 
 @Component({
   selector: 'app-admin',
-  standalone: true, // Since you're using a standalone app
+  standalone: true,
   templateUrl: './admin.component.html',
   styleUrls: ['./admin.component.scss'],
-  imports: [CommonModule, FormsModule] // Add these
+  imports: [CommonModule, FormsModule]
 })
 export class AdminComponent implements OnInit {
   users: User[] = [];
@@ -39,7 +39,7 @@ export class AdminComponent implements OnInit {
     this.adminService.createAdmin(this.newAdmin).subscribe(
       (admin) => {
         this.users.push(admin);
-        this.newAdmin = { userName: '', password: '', role: 'ADMIN' }; // Reset form
+        this.newAdmin = { userName: '', password: '', role: 'ADMIN' };
         this.errorMessage = '';
       },
       (error) => {
@@ -51,8 +51,8 @@ export class AdminComponent implements OnInit {
 
   // Logout method
   logout(): void {
-    localStorage.removeItem('token'); // Remove token from localStorage
-    localStorage.removeItem('role'); // Remove role from localStorage
-    this.router.navigate(['/login']); // Redirect to login page
+    localStorage.removeItem('token');
+    localStorage.removeItem('role');
+    this.router.navigate(['/login']);
   }
 }

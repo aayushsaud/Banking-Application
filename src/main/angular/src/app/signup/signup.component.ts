@@ -25,7 +25,7 @@ export class SignupComponent {
     this.authService.signup(this.userDto).subscribe(
       (response) => {
         console.log('Signup successful:', response);
-        this.router.navigate(['/login']);
+        this.router.navigate(['/login']); // Redirect to login after signup
       },
       (error) => {
         this.errorMessage = 'Signup failed. Please try again.';

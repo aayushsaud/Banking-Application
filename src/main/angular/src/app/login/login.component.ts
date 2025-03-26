@@ -9,7 +9,7 @@ import { CommonModule } from '@angular/common';
   standalone: true,
   imports: [CommonModule, FormsModule],
   templateUrl: './login.component.html',
-  styleUrls: ['./login.component.scss'] // Fixed styleUrl to styleUrls
+  styleUrls: ['./login.component.scss']
 })
 export class LoginComponent {
   userName: string = '';
@@ -19,15 +19,12 @@ export class LoginComponent {
   constructor(private authService: AuthService, private router: Router) {}
 
   onSubmit() {
-    // Update the response type to include 'token' and 'role'
     this.authService.login(this.userName, this.password).subscribe(
-      (response: { token: string, role: string }) => { // Correct response type
+      (response: { token: string, role: string }) => {
         if (response.token && response.role) {
-          // Store token and role in localStorage
           localStorage.setItem('token', response.token);
-          localStorage.setItem('role', response.role); // Store role in localStorage
+          localStorage.setItem('role', response.role);
 
-          // Redirect based on the role
           if (response.role === 'ROLE_ADMIN') {
             this.router.navigate(['/admin']);
           } else {

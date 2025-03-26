@@ -2,31 +2,31 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { AccountService } from '../services/account.service';
-import { Account } from '../models/account.model';  // Import the Account model
+import { Account } from '../models/account.model';
 
 @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [CommonModule, FormsModule],  // CommonModule and FormsModule are correctly imported
+  imports: [CommonModule, FormsModule],
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.scss']
 })
 export class HomeComponent implements OnInit {
   accounts: Account[] = [];
-  newAccount: Account = { bankName: '', balance: 0 };  // Initialize newAccount with default values
-  amount: number = 0;  // ✅ Added missing amount property
+  newAccount: Account = { bankName: '', balance: 0 };
+  amount: number = 0;
 
   constructor(private accountService: AccountService) {}
 
   ngOnInit(): void {
-    this.loadAccounts();  // Load the accounts on component initialization
+    this.loadAccounts();
   }
 
   // Fetch all accounts
     loadAccounts(): void {
       this.accountService.getAccounts().subscribe(
         (response: Account[]) => {
-          this.accounts = response.map(account => ({ ...account, amount: 0 })); // Ensure each account has an amount field
+          this.accounts = response.map(account => ({ ...account, amount: 0 }));
         },
         (error: any) => {
           console.error('Failed to fetch accounts:', error);
@@ -39,8 +39,8 @@ export class HomeComponent implements OnInit {
     this.accountService.createAccount(this.newAccount).subscribe(
       (response: Account) => {
         console.log('Account created successfully:', response);
-        this.loadAccounts();  // Refresh the account list after creating a new account
-        this.newAccount = { bankName: '', balance: 0 };  // Reset the new account form
+        this.loadAccounts();
+        this.newAccount = { bankName: '', balance: 0 };
       },
       (error: any) => {
         console.error('Failed to create account:', error);

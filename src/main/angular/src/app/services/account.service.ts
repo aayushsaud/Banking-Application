@@ -7,7 +7,7 @@ import { Account } from '../models/account.model';
   providedIn: 'root'
 })
 export class AccountService {
-    private apiUrl = '/api/account'; // Use relative path to leverage proxy
+    private apiUrl = '/api/account';
 
     constructor(private http: HttpClient) {}
 
