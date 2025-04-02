@@ -8,12 +8,18 @@ import com.springboot.Banking_Application.exception.UserNotFoundException;
 import com.springboot.Banking_Application.mapper.UserMapper;
 import com.springboot.Banking_Application.repository.UserRepository;
 import com.springboot.Banking_Application.service.UserService;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -70,12 +76,21 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public List<UserDto> getAllUsers() {
-        List<User> listOfUsers = userRepository.findAll();
-        if (listOfUsers.isEmpty()) {
-            throw new UserNotFoundException("No Users Available.");
-        }
-        return listOfUsers.stream().map(UserMapper::mapToUserDto).toList();
+    @Transactional(readOnly = true)
+    public Map<String, Object> getAllUsers(int page, int size) {
+        Pageable pageable = PageRequest.of(page, size, Sort.by("id").ascending());
+        Page<User> userPage = userRepository.findAll(pageable);
+
+        Page<UserDto> userDtoPage = userPage.map(UserMapper::mapToUserDto);
+
+        Map<String, Object> response = new HashMap<>();
+        response.put("users", userDtoPage.getContent());
+        // Remove +1 to use 0-based indexing
+        response.put("currentPage", userDtoPage.getNumber()); // Now 0-based
+        response.put("totalPages", userDtoPage.getTotalPages());
+        response.put("totalUsers", userDtoPage.getTotalElements());
+
+        return response;
     }
 
     @Override

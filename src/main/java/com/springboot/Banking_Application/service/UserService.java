@@ -2,6 +2,7 @@ package com.springboot.Banking_Application.service;
 
 import com.springboot.Banking_Application.dto.UserDto;
 import java.util.List;
+import java.util.Map;
 
 public interface UserService {
 
@@ -13,7 +14,7 @@ public interface UserService {
 
     UserDto findByUserName(String userName);
 
-    List<UserDto> getAllUsers();
+    Map<String, Object> getAllUsers(int page, int size);
 
     void deleteByUserName(String userName);
 }

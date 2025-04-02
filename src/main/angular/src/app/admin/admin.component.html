@@ -10,11 +10,58 @@
 
   <p *ngIf="errorMessage" class="error">{{ errorMessage }}</p>
 
-  <!-- Users List -->
+  <!-- Search Functionality -->
+  <div class="search-container">
+    <h3>Search Users</h3>
+    <form (ngSubmit)="searchUsers()">
+      <div class="search-field">
+        <label for="searchColumn">Search by Column:</label>
+        <select id="searchColumn" [(ngModel)]="selectedColumn" name="selectedColumn" required>
+          <option value="userName">Username</option>
+          <option value="role">Role</option>
+        </select>
+      </div>
+      <div class="search-field">
+        <label for="searchValue">Search Value:</label>
+        <input
+          type="text"
+          id="searchValue"
+          [(ngModel)]="searchValue"
+          name="searchValue"
+          placeholder="Enter search value"
+          required
+        />
+      </div>
+      <div class="button-container">
+        <button type="submit">Search</button>
+        <button type="button" (click)="removeSearchFilter()">Remove</button>
+      </div>
+    </form>
+  </div>
+
+  <!-- Users List Table -->
   <h3>All Users</h3>
-  <ul>
-    <li *ngFor="let user of users">
-      <strong>{{ user.userName }}</strong> - {{ user.role }}
-    </li>
-  </ul>
+  <table>
+    <thead>
+    <tr>
+      <th>User ID</th>
+      <th>Username</th>
+      <th>Role</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr *ngFor="let user of users">
+      <td>{{ user.id }}</td>
+      <td>{{ user.userName }}</td>
+      <td>{{ user.role }}</td>
+    </tr>
+    </tbody>
+  </table>
+
+  <!-- Pagination Controls -->
+  <div class="pagination">
+    <button (click)="changePage(currentPage - 1)" [disabled]="currentPage === 1">Previous</button>
+    <span>Page {{ currentPage }} of {{ totalPages }}</span>
+    <button (click)="changePage(currentPage + 1)" [disabled]="currentPage === totalPages">Next</button>
+  </div>
 </div>

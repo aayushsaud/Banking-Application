@@ -1,7 +1,9 @@
 package com.springboot.Banking_Application.controller;
 
 import com.springboot.Banking_Application.dto.UserDto;
+import com.springboot.Banking_Application.elastic.*;
 import com.springboot.Banking_Application.service.UserService;
+import com.springboot.Banking_Application.service.impl.ElasticUserService;
 import com.springboot.Banking_Application.util.JwtUtil;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -21,15 +23,17 @@ public class PublicController {
     private final UserService userService;
     private final UserDetailsService userDetailsService;
     private final JwtUtil jwtUtil;
+    private final ElasticUserService elasticUserService;
 
     public PublicController(AuthenticationManager authenticationManager,
                             UserService userService,
                             UserDetailsService userDetailsService,
-                            JwtUtil jwtUtil) {
+                            JwtUtil jwtUtil, ElasticUserService elasticUserService) {
         this.authenticationManager = authenticationManager;
         this.userService = userService;
         this.userDetailsService = userDetailsService;
         this.jwtUtil = jwtUtil;
+        this.elasticUserService = elasticUserService;
     }
 
     @GetMapping("/health-check")
@@ -39,8 +43,10 @@ public class PublicController {
 
     @PostMapping("/sign-up")
     public ResponseEntity<?> signUp (@RequestBody UserDto userDto) {
-        UserDto createdUser = userService.createUser(userDto);
-        return ResponseEntity.ok(createdUser);
+        UserDto createdUserDto = userService.createUser(userDto);
+        ElasticUser elasticUser = ElasticUserMapper.mapToElasticUser(createdUserDto);
+        elasticUserService.save(elasticUser);
+        return ResponseEntity.ok(createdUserDto);
     }
 
     @PostMapping("/log-in")
@@ -63,5 +69,4 @@ public class PublicController {
                     .body("Incorrect username or password");
         }
     }
-
 }
