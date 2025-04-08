@@ -1,6 +1,5 @@
 <h1>Welcome to Your Banking Application</h1>
 
-<!-- Create Account Form -->
 <div class="account-form-container">
   <h2>Create a New Account</h2>
   <form (ngSubmit)="createAccount()">
@@ -16,7 +15,6 @@
   </form>
 </div>
 
-<!-- Display Accounts -->
 <div class="accounts-list-container">
   <h2>Your Accounts</h2>
   <ul>
@@ -25,7 +23,6 @@
         <strong>{{ account.bankName }}</strong> - Balance: {{ account.balance | currency }}
       </div>
 
-      <!-- Deposit and Withdraw Amount for the Current Account -->
       <div class="transaction-buttons">
         <input type="number" [(ngModel)]="account.amount" placeholder="Enter amount" />
         <button class="deposit-btn" (click)="depositBalance(account.id, account.amount)">Deposit</button>

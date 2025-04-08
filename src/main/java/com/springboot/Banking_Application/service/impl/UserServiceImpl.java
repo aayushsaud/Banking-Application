@@ -85,8 +85,7 @@ public class UserServiceImpl implements UserService {
 
         Map<String, Object> response = new HashMap<>();
         response.put("users", userDtoPage.getContent());
-        // Remove +1 to use 0-based indexing
-        response.put("currentPage", userDtoPage.getNumber()); // Now 0-based
+        response.put("currentPage", userDtoPage.getNumber());
         response.put("totalPages", userDtoPage.getTotalPages());
         response.put("totalUsers", userDtoPage.getTotalElements());
 

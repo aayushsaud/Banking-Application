@@ -43,10 +43,6 @@ public class ElasticAccount {
         return accountHolderName;
     }
 
-    public void setAccountHolderName(String accountHolderName) {
-        this.accountHolderName = accountHolderName;
-    }
-
     public double getBalance() {
         return balance;
     }

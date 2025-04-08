@@ -1,7 +1,6 @@
 <div class="admin-container">
   <h2>Admin Panel</h2>
 
-  <!-- Create Admin Form -->
   <form (ngSubmit)="createAdmin()">
     <input type="text" [(ngModel)]="newAdmin.userName" name="userName" placeholder="Enter username" required />
     <input type="password" [(ngModel)]="newAdmin.password" name="password" placeholder="Enter password" required />
@@ -10,7 +9,6 @@
 
   <p *ngIf="errorMessage" class="error">{{ errorMessage }}</p>
 
-  <!-- Search Functionality -->
   <div class="search-container">
     <h3>Search Users</h3>
     <form (ngSubmit)="searchUsers()">
@@ -39,7 +37,6 @@
     </form>
   </div>
 
-  <!-- Users List Table -->
   <h3>All Users</h3>
   <table>
     <thead>
@@ -58,7 +55,6 @@
     </tbody>
   </table>
 
-  <!-- Pagination Controls -->
   <div class="pagination">
     <button (click)="changePage(currentPage - 1)" [disabled]="currentPage === 1">Previous</button>
     <span>Page {{ currentPage }} of {{ totalPages }}</span>

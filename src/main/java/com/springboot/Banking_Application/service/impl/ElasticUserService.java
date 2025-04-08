@@ -24,7 +24,7 @@ public class ElasticUserService {
     }
 
     public Map<String, Object> searchByColumn(String column, String value, int page, int size) {
-        Pageable pageable = PageRequest.of(page, size); // Remove Sort.by("userName")
+        Pageable pageable = PageRequest.of(page, size);
         Page<ElasticUser> userPage;
 
         if (column == null || value == null) {
@@ -37,7 +37,7 @@ public class ElasticUserService {
                 break;
             case "role":
                 try {
-                    Role role = Role.valueOf(value.toUpperCase());  // Convert string to Enum
+                    Role role = Role.valueOf(value.toUpperCase());
                     userPage = elasticUserRepository.findByRole(role, pageable);
                 } catch (IllegalArgumentException e) {
                     return Collections.emptyMap();
@@ -47,7 +47,6 @@ public class ElasticUserService {
                 return Collections.emptyMap();
         }
 
-        // Prepare response with pagination details
         Map<String, Object> response = new HashMap<>();
         response.put("users", userPage.getContent());
         response.put("currentPage", userPage.getNumber());

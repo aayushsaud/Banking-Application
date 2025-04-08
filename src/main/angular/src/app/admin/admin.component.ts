@@ -18,21 +18,21 @@ export class AdminComponent implements OnInit {
   errorMessage: string = '';
   selectedColumn: string = 'userName';
   searchValue: string = '';
-  currentPage: number = 1;  // Frontend is 1-based
+  currentPage: number = 1;
   totalPages: number = 1;
   isSearchActive: boolean = false;
 
   constructor(private adminService: AdminService, private router: Router) {}
 
   ngOnInit(): void {
-    this.loadUsers(1); // Start at page 1
+    this.loadUsers(1);
   }
 
   loadUsers(page: number): void {
     this.adminService.getAllUsers(page).subscribe({
       next: (response: any) => {
         this.users = response.users;
-        this.currentPage = response.currentPage + 1; // Convert 0-based to 1-based
+        this.currentPage = response.currentPage + 1;
         this.totalPages = response.totalPages;
       },
       error: (error) => {
@@ -48,13 +48,13 @@ export class AdminComponent implements OnInit {
     }
 
     this.isSearchActive = true;
-    const backendPage = page - 1; // Convert 1-based to 0-based for backend
+    const backendPage = page - 1;
 
     this.adminService.searchUsers(this.selectedColumn, this.searchValue, backendPage)
       .subscribe({
         next: (response: any) => {
           this.users = response.users;
-          this.currentPage = response.currentPage + 1; // Convert 0-based to 1-based
+          this.currentPage = response.currentPage + 1;
           this.totalPages = response.totalPages;
           this.errorMessage = '';
         },
@@ -74,8 +74,6 @@ export class AdminComponent implements OnInit {
       this.loadUsers(page);
     }
   }
-
-  // Remove the changeSearchPage method as it's redundant with the updated changePage method
 
   removeSearchFilter(): void {
     this.searchValue = '';

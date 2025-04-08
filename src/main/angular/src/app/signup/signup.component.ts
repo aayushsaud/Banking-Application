@@ -11,7 +11,7 @@ import { CommonModule } from '@angular/common';
   templateUrl: './signup.component.html',
   styleUrl: './signup.component.scss'
 })
-// signup.component.ts
+
 export class SignupComponent {
   userDto: any = {
     userName: '',
@@ -25,7 +25,7 @@ export class SignupComponent {
     this.authService.signup(this.userDto).subscribe(
       (response) => {
         console.log('Signup successful:', response);
-        this.router.navigate(['/login']); // Redirect to login after signup
+        this.router.navigate(['/login']);
       },
       (error) => {
         this.errorMessage = 'Signup failed. Please try again.';
