@@ -9,8 +9,11 @@ import java.util.List;
 
 @Service
 public class ElasticAccountService {
-    @Autowired
-    private ElasticAccountRepository elasticAccountRepository;
+    private final ElasticAccountRepository elasticAccountRepository;
+
+    public ElasticAccountService(ElasticAccountRepository elasticAccountRepository) {
+        this.elasticAccountRepository = elasticAccountRepository;
+    }
 
     public void save(ElasticAccount elasticAccount) {
         elasticAccountRepository.save(elasticAccount);

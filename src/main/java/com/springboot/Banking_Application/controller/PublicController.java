@@ -36,11 +36,6 @@ public class PublicController {
         this.elasticUserService = elasticUserService;
     }
 
-    @GetMapping("/health-check")
-    public String healthCheck() {
-        return "App is live and running.";
-    }
-
     @PostMapping("/sign-up")
     public ResponseEntity<?> signUp (@RequestBody UserDto userDto) {
         UserDto createdUserDto = userService.createUser(userDto);

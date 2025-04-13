@@ -20,7 +20,7 @@ import java.util.List;
 public class AccountServiceImpl implements AccountService {
 
     private final AccountRepository accountRepository;
-    private final UserService userService;  // Make final
+    private final UserService userService;
 
     public AccountServiceImpl(AccountRepository accountRepository, UserService userService) {
         this.accountRepository = accountRepository;

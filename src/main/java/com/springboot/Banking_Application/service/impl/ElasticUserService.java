@@ -16,8 +16,11 @@ import java.util.Map;
 @Service
 public class ElasticUserService {
 
-    @Autowired
-    private ElasticUserRepository elasticUserRepository;
+    private final ElasticUserRepository elasticUserRepository;
+
+    public ElasticUserService(ElasticUserRepository elasticUserRepository) {
+        this.elasticUserRepository = elasticUserRepository;
+    }
 
     public ElasticUser save(ElasticUser elasticUser) {
         return elasticUserRepository.save(elasticUser);
